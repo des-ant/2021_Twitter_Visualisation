@@ -1,68 +1,34 @@
 let app_obama_csv = "/data/app_obama.csv";
 let app_trump_csv = "/data/app_trump.csv";
 
-// function make_plot_approval() {
-//   Plotly.d3.csv(app_obama_csv, (app_obama) => {
-//     processData(app_obama)
-//   });
-// };
+let plotDiv = document.getElementById("plotDiv");
+let plotDiv1 = document.getElementById("plotDiv1");
 
-
-// function processData(allRows) {
-
-//   console.log(allRows);
-//   var x = [], y = [], standard_deviation = [];
-
-//   for (var i=0; i<allRows.length; i++) {
-//     row = allRows[i];
-//     x.push( row['Start Date'] );
-//     y.push( row['Approving'] );
-//   }
-//   console.log( 'X',x, 'Y',y, 'SD',standard_deviation );
-//   makePlotly( x, y, standard_deviation );
-// }
-
-// function makePlotly( x, y, standard_deviation ){
-//   var plotDiv = document.getElementById("plotDiv");
-//   var traces = [{
-//     x: x,
-//     y: y
-//   }];
-
-//   Plotly.newPlot(plotDiv, traces,
-//     {title: 'Plotting CSV data from AJAX call'});
-// };
-// makeplot();
-
-
-function makeplot() {
-  Plotly.d3.csv(app_obama_csv, (data) => { processData(data) });
-
+function makeplot(csv_file, divId, title) {
+  Plotly.d3.csv(csv_file, (data) => { processData(data, divId, title) });
 };
 
-function processData(allRows) {
+function processData(allRows, divId, title) {
 
-  console.log(allRows);
-  var x = [], y = [], standard_deviation = [];
-
-  for (var i = 0; i < allRows.length; i++) {
-    row = allRows[i];
-    x.push(row['End Date']);
+  var x = [], y = [];
+  for(let row of allRows){
+    x.push(row['Start Date']);
     y.push(row['Approving']);
-  }
-  console.log('X', x, 'Y', y, 'SD', standard_deviation);
-  makePlotly(x, y, standard_deviation);
+  };
+  makePlotly(x, y, divId, title);
 }
 
-function makePlotly(x, y, standard_deviation) {
-  var plotDiv = document.getElementById("plotDiv");
+function makePlotly(x, y, divId, title) {
   var traces = [{
     x: x,
-    y: y
+    y: y,
+    hovertemplate:
+    "%{x}, %{y}" +
+    "<extra></extra>", //hide extra tooltip info
   }];
 
   let layout = { 
-    title: 'Approval Ratings Obama',
+    title: title,
     yaxis: {
       range: [0, 100]
     }
@@ -70,6 +36,9 @@ function makePlotly(x, y, standard_deviation) {
 
   let config = {responsive: true};
 
-  Plotly.newPlot(plotDiv, traces, layout, config);
+  Plotly.newPlot(divId, traces, layout, config);
 };
-makeplot();
+
+// Draw plots
+makeplot(app_obama_csv, plotDiv, 'Approval Ratings Obama');
+makeplot(app_trump_csv, plotDiv1, 'Approval Ratings Trump');
