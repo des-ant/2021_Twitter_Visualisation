@@ -16,9 +16,26 @@
   <!-- Main Content-->
   <main>
     <div class="plotContainer">
-      <div id='plotDiv' class="scatPlot"></div>
-      <div id='plotDiv1' class="scatPlot"></div>
+      <div id='plotAppObama' class="scatPlot"></div>
+      <div id='plotTweetsObama' class="scatPlot"></div>
     </div>
+
+    <div class="slidecontainer">
+      <label for="myRange">year:</label>
+      <input type="range" min="2008" max="2021" value="2021" class="slider" id="myRange"
+      onchange="handler(event);">
+    </div>
+
+    <div class="plotContainer">
+      <div id='plotAppTrump' class="scatPlot"></div>
+      <div id='plotTweetsTrump' class="scatPlot"></div>
+    </div>
+
+    <!-- <div class="slidecontainer">
+      <label for="myRange">year:</label>
+      <input type="range" min="2008" max="2021" value="2021" class="slider" id="myRange"
+      onchange="handler(event);">
+    </div> -->
   </main>
 
 
