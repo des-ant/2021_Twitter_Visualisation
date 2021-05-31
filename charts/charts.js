@@ -1,12 +1,15 @@
 let app_obama_csv = "/data/app_obama.csv";
 let app_trump_csv = "/data/app_trump.csv";
 
+let app_obama_json = "/data/obama_presidential_tweets.json"
+
 let plotAppObama = document.getElementById("plotAppObama");
 let plotAppTrump = document.getElementById("plotAppTrump");
 
 let plotTweetsObama = document.getElementById("plotTweetsObama");
 let plotTweetsTrump = document.getElementById("plotTweetsTrump");
 
+// Process csv
 function makeplot(csv_file, divId, title) {
   Plotly.d3.csv(csv_file, (data) => { processData(data, divId, title) });
 };
@@ -14,7 +17,7 @@ function makeplot(csv_file, divId, title) {
 function processData(allRows, divId, title) {
 
   var x = [], y = [];
-  for(let row of allRows){
+  for (let row of allRows) {
     x.push(row['Start Date']);
     y.push(row['Approving']);
   };
@@ -27,28 +30,28 @@ function makePlotly(x, y, divId, title) {
     x: x,
     y: y,
     hovertemplate:
-    "%{x}, %{y}" +
-    "<extra></extra>", //hide extra tooltip info
+      "%{x}, %{y}" +
+      "<extra></extra>", //hide extra tooltip info
   }];
 
-  let layout = { 
+  let layout = {
     title: title,
     yaxis: {
       range: [0, 100]
     }
   };
 
-  let config = {responsive: true};
+  let config = { responsive: true };
 
   Plotly.newPlot(divId, traces, layout, config);
 
   // Get date value on click
-  plotAppObama.on('plotly_click', function(data){
+  plotAppObama.on('plotly_click', function (data) {
     var dateString = '';
-    for(var i=0; i < data.points.length; i++){
-        // pts = 'x = '+data.points[i].x +'\ny = '+
-        //     data.points[i].y.toPrecision(4) + '\n\n';
-        dateString = data.points[i].x;
+    for (var i = 0; i < data.points.length; i++) {
+      // pts = 'x = '+data.points[i].x +'\ny = '+
+      //     data.points[i].y.toPrecision(4) + '\n\n';
+      dateString = data.points[i].x;
     };
     // let yearInput = pts.split('-')[0];
     let dateObj = new Date(dateString);
@@ -57,13 +60,33 @@ function makePlotly(x, y, divId, title) {
     let dateYear = dateObj.getUTCFullYear();
     let dateMonthYear = dateMonth + ' ' + dateYear;
     // Draw graphs
-    Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
+    Plotly.d3.csv("../data/obama_presidential_tweets_tokens.csv", (tweets) => {
       Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
         filtered_tweets = filter_tweets(tweets, tsne_data, dateObj);
+        // Count word frequency
+        let words = {};
         // Add an author property
-        for(let tweet of filtered_tweets){
+        for (let tweet of filtered_tweets) {
           tweet.author = "Obama";
+          for (let i = 0; i < 32; i++) {
+            let token = tweet[Object.keys(tweet)[5 + i]];
+            if (token && token != 'http://...') {
+              if (!words[token]) {
+                words[token] = 1;
+              } else {
+                words[token]++;
+              }
+              // console.log(token);
+            } else {
+              break;
+            }
+          }
         }
+        keysSorted = Object.keys(words).sort(function(a,b){return words[a]-words[b]})
+
+
+        console.log(keysSorted);
+        // alert(words);
         make_plot(plotTweetsObama, filtered_tweets, dateMonthYear);
         // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
       });
@@ -73,7 +96,7 @@ function makePlotly(x, y, divId, title) {
 };
 
 // Draw plots
-makeplot(app_obama_csv, plotAppObama, 'Approval Ratings of Obama');
+makeplot(app_obama_csv, plotAppObama, 'Approval Ratings of Obama 2009-2015');
 makeplot(app_trump_csv, plotAppTrump, 'Approval Ratings of Trump');
 
 /* ---------------
@@ -81,7 +104,7 @@ makeplot(app_trump_csv, plotAppTrump, 'Approval Ratings of Trump');
 
 // Make text fit hovertool
 // from https://codereview.stackexchange.com/a/171857
-function convertToParagraph(sentence, maxLineLength){
+function convertToParagraph(sentence, maxLineLength) {
   let lineLength = 0;
   sentence = sentence.split(" ")
   return sentence.reduce((result, word) => {
@@ -126,7 +149,7 @@ function convertToParagraph(sentence, maxLineLength){
 //   Plotly.newPlot(plotId, data, layout);
 // }
 
-function make_plot(plotId, tweets, dateString){
+function make_plot(plotId, tweets, dateString) {
   let data = [{
     x: tweets.map(d => d.x),
     y: tweets.map(d => d.y),
@@ -182,7 +205,7 @@ function initialGraphs() {
     Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
       tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
       // Add an author property
-      for(let tweet of tweets){
+      for (let tweet of tweets) {
         tweet.author = "Obama";
       }
       make_plot(plotTweetsObama, tweets, 'All Tweets');
@@ -197,7 +220,7 @@ initialGraphs();
 
 
 // Returns Date object from input values
-function handler(e){
+function handler(e) {
   // let dateInput = e.target.value;
   let yearInput = e.target.value;
   let dateObj = new Date(yearInput, 1, 1);
@@ -207,14 +230,14 @@ function handler(e){
     Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
       filtered_tweets = filter_tweets(tweets, tsne_data, dateObj);
       // Add an author property
-      for(let tweet of filtered_tweets){
+      for (let tweet of filtered_tweets) {
         tweet.author = "Obama";
       }
       make_plot(plotTweetsObama, filtered_tweets, yearInput);
       // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
     });
   });
-  
+
   // Plotly.d3.csv("../data/trump_presidential_tweets.csv", (tweets) => {
   //   filtered_tweets = filter_tweets(tweets, dateObj)
   //   // Add an author property
@@ -265,10 +288,10 @@ function handler(e){
 //   for(let tweet of obama_tweets){
 //     tweet.author = "Obama"
 //   }
-  
+
 //   //combine all tweets into one array
 //   let tweets = [...trump_tweets, ...obama_tweets];
-  
+
 
 //   //only include tweets containing one of these strings
 //   //Try experimenting with different search tags
