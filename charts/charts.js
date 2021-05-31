@@ -21,6 +21,7 @@ function processData(allRows, divId, title) {
   makePlotly(x, y, divId, title);
 }
 
+// Approval ratings line graph
 function makePlotly(x, y, divId, title) {
   var traces = [{
     x: x,
@@ -40,6 +41,35 @@ function makePlotly(x, y, divId, title) {
   let config = {responsive: true};
 
   Plotly.newPlot(divId, traces, layout, config);
+
+  // Get date value on click
+  plotAppObama.on('plotly_click', function(data){
+    var dateString = '';
+    for(var i=0; i < data.points.length; i++){
+        // pts = 'x = '+data.points[i].x +'\ny = '+
+        //     data.points[i].y.toPrecision(4) + '\n\n';
+        dateString = data.points[i].x;
+    };
+    // let yearInput = pts.split('-')[0];
+    let dateObj = new Date(dateString);
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let dateMonth = months[dateObj.getUTCMonth()];
+    let dateYear = dateObj.getUTCFullYear();
+    let dateMonthYear = dateMonth + ' ' + dateYear;
+    // Draw graphs
+    Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
+      Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
+        filtered_tweets = filter_tweets(tweets, tsne_data, dateObj);
+        // Add an author property
+        for(let tweet of filtered_tweets){
+          tweet.author = "Obama";
+        }
+        make_plot(plotTweetsObama, filtered_tweets, dateMonthYear);
+        // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
+      });
+    });
+
+  });
 };
 
 // Draw plots
@@ -96,20 +126,15 @@ function convertToParagraph(sentence, maxLineLength){
 //   Plotly.newPlot(plotId, data, layout);
 // }
 
-function make_plot(plotId, tweets, year){
+function make_plot(plotId, tweets, dateString){
   let data = [{
     x: tweets.map(d => d.x),
     y: tweets.map(d => d.y),
     customdata: tweets.map(d => convertToParagraph(d.author + ": " + d.text, 64)),
     marker: {
-      // color: tweets.map(d => d.author=="Trump"?0:1), //color 0 if trump, 1 if obama
       size: 8,
       colorscale: 'Jet',
-      color: tweets.map(d => d.cluster_id),
-      // colorscale: [ //custom color scheme
-      //   ['0.0', 'rgb(255,0,0)'], 
-      //   ['1.0', 'rgb(0,0,255)'],
-      // ]
+      color: tweets.map(d => d.cluster_id)
     },
     mode: 'markers',
     type: 'scatter',
@@ -126,10 +151,11 @@ function make_plot(plotId, tweets, year){
     yaxis: {
       visible: false,
     },
-    title: year
+    title: dateString
   };
 
   Plotly.newPlot(plotId, data, layout);
+
 };
 
 // Helper function to filter tweets by date
@@ -143,10 +169,32 @@ function filter_tweets(tweet_data, tsne_data, dateObj) {
   //3) && new Date(tweet.datetime) < new Date(2015, 6, 5))
 
   // Filter tweet by date
-  tweets = tweets.filter(tweet => new Date(tweet.datetime).getFullYear() === dateObj.getFullYear());
+  // tweets = tweets.filter(tweet => new Date(tweet.datetime).getFullYear() === dateObj.getFullYear());
+  tweets = tweets.filter(tweet => new Date(tweet.datetime).getUTCMonth() === dateObj.getUTCMonth() && new Date(tweet.datetime).getUTCFullYear() === dateObj.getUTCFullYear());
+
 
   return tweets;
 }
+
+function initialGraphs() {
+  // Draw graphs
+  Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
+    Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
+      tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
+      // Add an author property
+      for(let tweet of tweets){
+        tweet.author = "Obama";
+      }
+      make_plot(plotTweetsObama, tweets, 'All Tweets');
+      // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
+    });
+  });
+};
+
+initialGraphs();
+
+
+
 
 // Returns Date object from input values
 function handler(e){
