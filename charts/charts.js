@@ -65,7 +65,7 @@ function makePlotly(x, y, divId, title) {
     // Draw graphs
     Plotly.d3.csv("../data/obama_presidential_tweets_tokens.csv", (tweets) => {
       Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
-        filtered_tweets = filter_tweets(tweets, tsne_data, dateObj);
+        filtered_tweets = filter_tweets_date(tweets, tsne_data, dateObj);
         // Count word frequency
         let words = {};
         // Add an author property
@@ -224,7 +224,7 @@ function make_sentiment(plotId, tweets, sentTitle) {
 }
 
 // Helper function to filter tweets by date
-function filter_tweets(tweet_data, tsne_data, dateObj) {
+function filter_tweets_date(tweet_data, tsne_data, dateObj) {
   //add tsne data to trump and obama tweets
   //   trump_tweets = trump_tweets.map((trump_tweet, index) => Object.assign(trump_tweet, tsne_data_trump[index]))
   let tweets = tweet_data.map((tweet_data, index) => Object.assign(tweet_data, tsne_data[index]));
@@ -241,6 +241,22 @@ function filter_tweets(tweet_data, tsne_data, dateObj) {
   return tweets;
 }
 
+// Helper function to filter tweets by topic
+function filter_tweets_topic(tweets, topic) {
+
+  let topics = {
+    guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
+    lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
+    china: ["China", "Russia"]
+  };
+
+  // Only include tweets containing one of these strings inside a topic
+  tweets = tweets.filter(tweet => topics[topic].some(word => tweet.text.includes(word)));
+
+
+  return tweets;
+}
+
 function initialGraphs() {
   // Draw Obama graphs
   Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
@@ -252,8 +268,14 @@ function initialGraphs() {
       }
       make_plot(plotTweetsObama, tweets, 'All Tweets');
       // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
+
+      // Filter by topic
+      // let filtered_tweets = filter_tweets_topic(tweets, "guns");
+      // let filtered_tweets = filter_tweets_topic(tweets, "lgbt");
+      let filtered_tweets = filter_tweets_topic(tweets, "china");
+
       // Make sentiment plot
-      make_sentiment(plotSentObama, tweets, 'Obama Tweet Sentiment Over Time');
+      make_sentiment(plotSentObama, filtered_tweets, 'Obama Tweet Sentiment Over Time');
     });
   });
   // Draw Trump graphs
@@ -262,8 +284,14 @@ function initialGraphs() {
     for (let tweet of tweets) {
       tweet.author = "Trump";
     }
+
+    // Filter by topic
+    // let filtered_tweets = filter_tweets_topic(tweets, "guns");
+    // let filtered_tweets = filter_tweets_topic(tweets, "lgbt");
+    let filtered_tweets = filter_tweets_topic(tweets, "china");
+
     // Make sentiment plot
-    make_sentiment(plotSentTrump, tweets, 'Trump Tweet Sentiment Over Time');
+    make_sentiment(plotSentTrump, filtered_tweets, 'Trump Tweet Sentiment Over Time');
   });
 };
 
@@ -281,7 +309,7 @@ function handler(e) {
   // Draw graphs
   Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
     Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
-      filtered_tweets = filter_tweets(tweets, tsne_data, dateObj);
+      filtered_tweets = filter_tweets_date(tweets, tsne_data, dateObj);
       // Add an author property
       for (let tweet of filtered_tweets) {
         tweet.author = "Obama";
