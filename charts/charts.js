@@ -1,19 +1,22 @@
 let app_obama_csv = "/data/app_obama.csv";
 let app_trump_csv = "/data/app_trump.csv";
 
-let app_obama_json = "/data/obama_presidential_tweets.json"
-
 let plotAppObama = document.getElementById("plotAppObama");
 let plotAppTrump = document.getElementById("plotAppTrump");
 
 let plotTweetsObama = document.getElementById("plotTweetsObama");
 let plotTweetsTrump = document.getElementById("plotTweetsTrump");
 
+// Access sentiment plot div in html file
+let plotSentObama = document.getElementById("plotSentObama");
+let plotSentTrump = document.getElementById("plotSentTrump");
+
 // Process csv
 function makeplot(csv_file, divId, title) {
   Plotly.d3.csv(csv_file, (data) => { processData(data, divId, title) });
 };
 
+// Process get data points for Approval Rating
 function processData(allRows, divId, title) {
 
   var x = [], y = [];
@@ -91,6 +94,7 @@ function makePlotly(x, y, divId, title) {
         // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
       });
     });
+    
 
   });
 };
@@ -149,6 +153,7 @@ function convertToParagraph(sentence, maxLineLength) {
 //   Plotly.newPlot(plotId, data, layout);
 // }
 
+// Tsne plot
 function make_plot(plotId, tweets, dateString) {
   let data = [{
     x: tweets.map(d => d.x),
@@ -181,6 +186,43 @@ function make_plot(plotId, tweets, dateString) {
 
 };
 
+// Sentiment plot
+function make_sentiment(plotId, tweets, sentTitle) {
+  let data = [{
+    // Get x and y axis data points from tweet data
+    // Map x axis to date
+    // Map y axis to sentiment
+    x: tweets.map(d => d.datetime),
+    y: tweets.map(d => d.sentiment),
+    customdata: tweets.map(d => convertToParagraph(d.author + ": " + d.text, 64)),
+    marker: {
+      size: 8,
+      colorscale: 'Portland',
+      // Color scale based on sentiment
+      color: tweets.map(d => d.sentiment * -1)
+    },
+    mode: 'markers',
+    type: 'scatter',
+    hovertemplate:
+      "%{customdata}" +
+      "<extra></extra>", //hide extra tooltip info
+  }];
+
+  let layout = {
+    hovermode: "closest", //hover closest by default
+    xaxis: {
+      visible: true,
+    },
+    yaxis: {
+      visible: true,
+    },
+    title: sentTitle
+  };
+
+  Plotly.newPlot(plotId, data, layout);
+
+}
+
 // Helper function to filter tweets by date
 function filter_tweets(tweet_data, tsne_data, dateObj) {
   //add tsne data to trump and obama tweets
@@ -200,17 +242,28 @@ function filter_tweets(tweet_data, tsne_data, dateObj) {
 }
 
 function initialGraphs() {
-  // Draw graphs
+  // Draw Obama graphs
   Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
     Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
       tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
-      // Add an author property
+      // Iterate through each tweet and add author property
       for (let tweet of tweets) {
         tweet.author = "Obama";
       }
       make_plot(plotTweetsObama, tweets, 'All Tweets');
       // make_plot(plotTweetsObama, filtered_tweets, tsne_data);
+      // Make sentiment plot
+      make_sentiment(plotSentObama, tweets, 'Obama Tweet Sentiment Over Time');
     });
+  });
+  // Draw Trump graphs
+  Plotly.d3.csv("../data/trump_presidential_tweets.csv", (tweets) => {
+    // Iterate through each tweet and add author property
+    for (let tweet of tweets) {
+      tweet.author = "Trump";
+    }
+    // Make sentiment plot
+    make_sentiment(plotSentTrump, tweets, 'Trump Tweet Sentiment Over Time');
   });
 };
 
