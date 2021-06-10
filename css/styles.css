@@ -1,0 +1,26 @@
+.plotContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.scatPlot {
+  width: 50vw;
+  height: 50vw;
+}
+
+.bg-img {
+  height: 66vw;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.5)), to(rgba(0, 0, 0, 0.5))), url(/img/srikanta-h-u-upMISxb0WD0-unsplash.jpeg) no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/img/srikanta-h-u-upMISxb0WD0-unsplash.jpeg) no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+  max-height: 100vh;
+}
+/*# sourceMappingURL=styles.css.map */

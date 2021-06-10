@@ -1,0 +1,19 @@
+.plotContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.scatPlot {
+  width: 50vw;
+  height: 50vw;
+}
+
+// Hero Banner Background Image
+.bg-img {
+  height: 66vw;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/img/srikanta-h-u-upMISxb0WD0-unsplash.jpeg) no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+  max-height: 100vh;
+}
