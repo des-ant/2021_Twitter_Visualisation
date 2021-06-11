@@ -72,19 +72,21 @@ function filter_tweets_topic(tweets, words) {
 }
 
 
-function initialGraphs() {
+function initialGraphs(words) {
   // Draw Obama graphs
   Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
     Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
       tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
       
-      let filtered_tweets = filter_tweets_topic(tweets, ["China", "Russia"]);
+      if (words) {
+        tweets = filter_tweets_topic(tweets, words);
+      }
 
       // Iterate through each tweet and add author property
-      for (let tweet of filtered_tweets) {
+      for (let tweet of tweets) {
         tweet.author = "Obama";
       }
-      make_plot(plotTweetsObama, filtered_tweets, 'Obama Tweets');
+      make_plot(plotTweetsObama, tweets, 'Obama Tweets');
     });
   });
 
@@ -93,16 +95,33 @@ function initialGraphs() {
     Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_trump.csv", (tsne_data) => {
       tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
       
-      let filtered_tweets = filter_tweets_topic(tweets, ["China", "Russia"]);
+      if (words) {
+        tweets = filter_tweets_topic(tweets, words);
+      }
 
       // Iterate through each tweet and add author property
-      for (let tweet of filtered_tweets) {
+      for (let tweet of tweets) {
         tweet.author = "Trump";
       }
-      make_plot(plotTweetsTrump, filtered_tweets, 'Trump Tweets');
+      make_plot(plotTweetsTrump, tweets, 'Trump Tweets');
     });
   });
 
 };
 
 initialGraphs();
+
+function getInputValue(){
+  // Selecting the input element and get its value 
+  let inputVal = document.getElementById("filter").value;
+  
+  let words = inputVal.split(",");
+
+  // // Displaying the value
+  // alert(words);
+
+  // return words;
+  initialGraphs(words);
+
+  return false;
+}
