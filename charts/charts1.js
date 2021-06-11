@@ -235,8 +235,12 @@ function drawNews(plotDiv) {
     [11, 4, 1, 3, 2, 2]
   ];
   
-  var colors = ['rgba(67,67,67,1)', 'rgba(115,115,115,1)', 'rgba(49,130,189, 1)',
-    'rgba(189,189,189,1)', 'rgba(189,189,189,1)'
+  var colors = [
+    'rgba(30,30,30,1)',
+    'rgba(67,67,67,1)',
+    'rgba(49,130,189, 1)',
+    'rgba(115,115,115,1)',
+    'rgba(189,189,189,1)',
   ];
   
   var lineSize = [2, 2, 4, 2, 2];
@@ -249,6 +253,7 @@ function drawNews(plotDiv) {
     var result = {
       x: xData[i],
       y: yData[i],
+      name: labels[i],
       type: 'scatter',
       mode: 'lines',
       line: {
@@ -264,7 +269,8 @@ function drawNews(plotDiv) {
       marker: {
         color: colors[i],
         size: 12
-      }
+      },
+      hoverinfo: 'skip', //hide extra tooltip info
     };
     data.push(result, result2);
   }
@@ -308,14 +314,14 @@ function drawNews(plotDiv) {
       {
         xref: 'paper',
         yref: 'paper',
-        x: 0.0,
+        x: 0.5,
         y: 1.10,
-        xanchor: 'left',
+        xanchor: 'center',
         yanchor: 'bottom',
         text: '<b>Major Sources of Election News</b>',
         font:{
           family: 'Sans-serif',
-          size: 28,
+          size: 24,
           color: 'rgb(37,37,37)'
         },
         showarrow: false
@@ -323,9 +329,9 @@ function drawNews(plotDiv) {
       {
         xref: 'paper',
         yref: 'paper',
-        x: 0.0,
+        x: 0.5,
         y: 1,
-        xanchor: 'left',
+        xanchor: 'center',
         yanchor: 'bottom',
         text: 'Where Americans get most of their news about politics and the election<br>(among all adults, up to two mentions allowed)',
         font:{
