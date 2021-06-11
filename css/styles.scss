@@ -20,6 +20,12 @@
 
 // Centre Table
 table.center {
-  margin-left:auto; 
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.graphs-center {
+  // border: 1px solid red;
+  display: flex;
+  justify-content: center;
 }

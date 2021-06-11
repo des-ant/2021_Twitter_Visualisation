@@ -58,11 +58,6 @@ function make_plot(plotId, tweets, plotTitle) {
 // Helper function to filter tweets by topic
 function filter_tweets_topic(tweets, words) {
 
-  // let topics = {
-  //   guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
-  //   lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
-  //   china: ["China", "Russia"]
-  // };
 
   // Only include tweets containing one of these strings inside a topic
   tweets = tweets.filter(tweet => words.some(word => tweet.text.includes(word)));
@@ -125,3 +120,26 @@ function getInputValue(){
 
   return false;
 }
+
+// function filterTopic(){
+//   // Selecting the input element and get its value 
+//   let inputVal = document.getElementById("filter").value;
+
+//   let topics = {
+//     guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
+//     lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
+//     china: ["China", "Russia"]
+//   };
+
+//   inputVal = topics[]
+  
+//   let words = topics[topic];
+
+//   // // Displaying the value
+//   // alert(words);
+
+//   // return words;
+//   initialGraphs(words);
+
+//   return false;
+// }

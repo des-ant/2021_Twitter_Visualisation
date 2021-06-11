@@ -179,7 +179,7 @@ function drawElection(plotDiv) {
         }
       },
       {
-        x: 270,
+        x: 480,
         y: -0.75,
         xref: 'x',
         yref: 'y',
@@ -208,7 +208,9 @@ function drawElection(plotDiv) {
     xanchor: 'center'
   };
   
-  Plotly.newPlot(plotDiv, data, layout);
+  let config = {responsive: true};
+
+  Plotly.newPlot(plotDiv, data, layout, config);
   
 }
 
@@ -269,8 +271,9 @@ function drawNews(plotDiv) {
   
   var layout = {
     showlegend: false,
+    autosize: false,
     height: 600,
-    width: 600,
+    width: 650,
     xaxis: {
       showline: true,
       showgrid: false,
@@ -305,8 +308,9 @@ function drawNews(plotDiv) {
       {
         xref: 'paper',
         yref: 'paper',
+        x: 0.0,
         y: 1.10,
-        xanchor: 'center',
+        xanchor: 'left',
         yanchor: 'bottom',
         text: '<b>Major Sources of Election News</b>',
         font:{
@@ -319,8 +323,9 @@ function drawNews(plotDiv) {
       {
         xref: 'paper',
         yref: 'paper',
+        x: 0.0,
         y: 1,
-        xanchor: 'center',
+        xanchor: 'left',
         yanchor: 'bottom',
         text: 'Where Americans get most of their news about politics and the election<br>(among all adults, up to two mentions allowed)',
         font:{
@@ -332,9 +337,9 @@ function drawNews(plotDiv) {
       {
         xref: 'paper',
         yref: 'paper',
-        x: 0.5,
+        x: 1.0,
         y: -0.1,
-        xanchor: 'center',
+        xanchor: 'right',
         yanchor: 'top',
         text: 'Source: (Smith, 2009)',
         showarrow: false,
