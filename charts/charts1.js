@@ -284,7 +284,11 @@ function drawNews(plotDiv) {
     autosize: false,
     height: 600,
     width: 650,
+    font: {
+      family: 'Sans-serif'
+    },
     xaxis: {
+      title: "Year",
       showline: true,
       showgrid: false,
       showticklabels: true,
@@ -417,7 +421,6 @@ function makePlotFollowers(plotDiv) {
   var layout = {
     title: '<span style="font-size: 24px;"><b>Top 5 Most Followed Twitter Accounts in March 2021</b></span>',
     font: {
-      size: 14,
       family: 'Sans-serif'
     },
     margin: {
