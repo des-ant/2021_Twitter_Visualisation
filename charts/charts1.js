@@ -1,5 +1,6 @@
 let plotElection2008 = document.getElementById("plotElection2008");
 let plotElectionNews = document.getElementById("plotElectionNews");
+let plotFollowers = document.getElementById("plotFollowers");
 
 function drawElection(plotDiv) {
 
@@ -205,7 +206,10 @@ function drawElection(plotDiv) {
     },
     height: 325,
     width: 750,
-    xanchor: 'center'
+    xanchor: 'center',
+    margin: {
+      b: 50
+    }
   };
   
   let config = {responsive: true};
@@ -230,22 +234,22 @@ function drawNews(plotDiv) {
   var yData = [
     [72, 70, 66, 78, 69, 77],
     [60, 39, 33, 39, 34, 28],
-    [3, 11, 7, 18, 15, 26],
     [19, 15, 13, 17, 17, 13],
-    [11, 4, 1, 3, 2, 2]
+    [11, 4, 1, 3, 2, 2],
+    [3, 11, 7, 18, 15, 26]
   ];
   
   var colors = [
     'rgba(30,30,30,1)',
     'rgba(67,67,67,1)',
-    'rgba(49,130,189, 1)',
     'rgba(115,115,115,1)',
     'rgba(189,189,189,1)',
+    'rgba(49,130,189, 1)'
   ];
   
-  var lineSize = [2, 2, 4, 2, 2];
+  var lineSize = [2, 2, 2, 2, 4];
   
-  var labels = ['Television', 'Newspaper', 'Internet', 'Radio', 'Magazines'];
+  var labels = ['Television', 'Newspaper', 'Radio', 'Magazines', 'Internet'];
   
   var data = [];
   
@@ -397,3 +401,54 @@ function drawNews(plotDiv) {
 }
 
 drawNews(plotElectionNews);
+
+// Bar graph for number of Twitter followers
+function makePlotFollowers(plotDiv) {
+  let data = [{
+    type: 'bar',
+    x: [ 91.39, 102.22, 109.52, 114.04, 129.78],
+    y: ['@Cristiano', '@rihanna', '@katyperry', '@justinbieber', '@barackobama'],
+    orientation: 'h',
+    marker: {
+      color: 'hsl(204, 71%, 39%)'
+    }
+  }];
+
+  var layout = {
+    title: '<span style="font-size: 24px;"><b>Top 5 Most Followed Twitter Accounts in March 2021</b></span>',
+    font: {
+      size: 14,
+      family: 'Sans-serif'
+    },
+    margin: {
+      t: 75,
+      l: 125,
+      b: 75
+    },
+    height: 325,
+    xaxis: {
+      title: "Number of Twitter followers in millions",
+    },
+    annotations: [
+      {
+        x: 130,
+        y: 0,
+        xref: 'x',
+        yref: 'y',
+        text: 'Source: (Tankovska, 2021)',
+        showarrow: false,
+        font: {
+          family: 'Sans-serif',
+          size: 12,
+          color: 'rgb(150,150,150)'
+        }
+      }
+    ]
+  }
+
+  let config = {responsive: true}
+
+  Plotly.newPlot(plotDiv, data, layout, config);
+}
+
+makePlotFollowers(plotFollowers);
