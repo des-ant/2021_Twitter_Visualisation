@@ -286,7 +286,7 @@
         </div>
         <div class="columns is-centered is-vcentered">
           <div class="column is-2">
-            <form>
+            <form id="formTweetsFilter">
 
               <label for="topic">Choose a topic:</label>
               <select name="topic" id="topic" onchange="filterTopic()">
@@ -304,15 +304,15 @@
           </div>
           <div class="column is-10">
             <div class="columns is-centered">
-              <div class="column is-10">
+              <div class="column is-12">
                 <figure>
-                  <!-- Trump Tweet Sentiment Plot -->
+                  <!-- Obama Tweet Sentiment Plot -->
                   <div id="plotSentObama" class="graphs-center"></div>
                 </figure>
               </div>
             </div>
             <div class="columns is-centered">
-              <div class="column is-10">
+              <div class="column is-12">
                 <figure>
                   <!-- Trump Tweet Sentiment Plot -->
                   <div id="plotSentTrump" class="graphs-center"></div>

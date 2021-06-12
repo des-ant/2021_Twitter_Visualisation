@@ -1,9 +1,8 @@
-let app_obama_csv = "/data/app_obama.csv";
-let app_trump_csv = "/data/app_trump.csv";
-
 let plotTweetsObama = document.getElementById("plotTweetsObama");
 let plotTweetsTrump = document.getElementById("plotTweetsTrump");
 
+let obamaTweetsCsv = "../data/obama_presidential_tweets.csv";
+let trumpTweetsCsv = "../data/trump_presidential_tweets.csv";
 
 // Make text fit hovertool
 // from https://codereview.stackexchange.com/a/171857
@@ -22,7 +21,7 @@ function convertToParagraph(sentence, maxLineLength) {
 };
 
 // Sentiment plot
-function make_sentiment(plotId, tweets, plotTitle) {
+function make_sentiment(plotId, tweets, plotTitle, tweetCount, avgSent) {
   let data = [{
     // Get x and y axis data points from tweet data
     // Map x axis to date
@@ -72,7 +71,8 @@ function make_sentiment(plotId, tweets, plotTitle) {
     },
     margin: {
       t: 35,
-      b: 35
+      b: 35,
+      r: 100
     },
     // Hide Axes Labels
     xaxis: {
@@ -103,11 +103,11 @@ function make_sentiment(plotId, tweets, plotTitle) {
           color: 'rgb(75, 75, 75)'
         }
       },
-      // Sentiment negative axes arrow
+      // Sentiment positive axes arrow
       {
         xref: 'paper',
         yref: 'paper',
-        x: -0.05,
+        x: -0.0325,
         y: 0.95,
         xanchor: 'right',
         yanchor: 'bottom',
@@ -118,6 +118,7 @@ function make_sentiment(plotId, tweets, plotTitle) {
         ax: 0,
         ay: 100,
       },
+      // Sentiment negative axes label
       {
         xref: 'paper',
         yref: 'paper',
@@ -137,7 +138,7 @@ function make_sentiment(plotId, tweets, plotTitle) {
       {
         xref: 'paper',
         yref: 'paper',
-        x: -0.05,
+        x: -0.0325,
         y: 0.05,
         xanchor: 'right',
         yanchor: 'top',
@@ -147,6 +148,72 @@ function make_sentiment(plotId, tweets, plotTitle) {
         arrowcolor: 'rgb(75, 75, 75)',
         ax: 0,
         ay: -100,
+      },
+      // Tweet Count Words
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0.95,
+        y: 1,
+        xanchor: 'left',
+        yanchor: 'top',
+        text: `Number of tweets:`,
+        showarrow: false,
+        font: {
+          size: 14,
+          family: 'Sans-serif',
+          color: 'rgb(75, 75, 75)'
+        }
+      },
+      // Tweet Count Number
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0.975,
+        y: 0.95,
+        xanchor: 'left',
+        yanchor: 'top',
+        text: `<b>${tweetCount}</b>`,
+        showarrow: false,
+        font: {
+          size: 24,
+          family: 'Sans-serif',
+          color: 'rgb(75, 75, 75)'
+        }
+      },
+      // Average sentiment
+      {
+        xref: 'paper',
+        yref: 'y',
+        x: 1,
+        y: avgSent,
+        xanchor: 'left',
+        yanchor: 'bottom',
+        showarrow: true,
+        arrowhead: 0,
+        arrowwidth: 1,
+        arrowcolor: 'rgb(75, 75, 75)',
+        ax: -850,
+        ay: 0,
+        text: "<b>Average Sentiment</b>",
+        opacity: 0.75
+      },
+      // Neutral sentiment baseline
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 1,
+        y: 0.5,
+        xanchor: 'left',
+        yanchor: 'bottom',
+        showarrow: true,
+        arrowhead: 0,
+        arrowwidth: 1,
+        arrowcolor: 'rgb(75, 75, 75)',
+        ax: -850,
+        ay: 0,
+        text: "<b>Neutral</b>",
+        opacity: 0.5
       }
     ]
   };
@@ -163,35 +230,44 @@ function filter_tweets_topic(tweets, words) {
   return tweets;
 }
 
+// Helper function to filter tweets, set up graphs
+function graphHelper(csvLocation, author, plotDiv, words) {
+  // Read csv file and extract and filter tweets
+  Plotly.d3.csv(csvLocation, (tweets) => {
+    if (words) {
+      tweets = filter_tweets_topic(tweets, words);
+    }
 
+    // Count number of tweets
+    let tweetCount = 0;
+    // Count total sentiment
+    let totalSent = 0;
+
+    // Iterate through each tweet and add author property
+    for (let tweet of tweets) {
+      tweet.author = author;
+      tweetCount++;
+      totalSent += parseFloat(tweet.sentiment);
+    }
+
+    // Calculate average sentiment
+    let avgSent = totalSent / tweetCount;
+
+    // Set title of plot
+    let plotTitle = `${author}'s Tweet Sentiment During Presidency`
+
+    // Make sentiment plot
+    make_sentiment(plotDiv, tweets, plotTitle, tweetCount, avgSent);
+  });
+}
+
+// Draw sentiment graphs
 function initialGraphs(words) {
   // Draw Obama graphs
-  Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
-    if (words) {
-      tweets = filter_tweets_topic(tweets, words);
-    }
-
-    // Iterate through each tweet and add author property
-    for (let tweet of tweets) {
-      tweet.author = "Obama";
-    }
-    // Make sentiment plot
-    make_sentiment(plotSentObama, tweets, "Obama's Tweet Sentiment During Presidency");
-  });
+  graphHelper(obamaTweetsCsv, "Obama", plotSentObama, words);
 
   // Draw Trump graphs
-  Plotly.d3.csv("../data/trump_presidential_tweets.csv", (tweets) => {
-    if (words) {
-      tweets = filter_tweets_topic(tweets, words);
-    }
-
-    // Iterate through each tweet and add author property
-    for (let tweet of tweets) {
-      tweet.author = "Trump";
-    }
-    // Make sentiment plot
-    make_sentiment(plotSentTrump, tweets, "Trump's Tweet Sentiment During Presidency");
-  });
+  graphHelper(trumpTweetsCsv, "Trump", plotSentTrump, words);
 };
 
 initialGraphs();
@@ -211,7 +287,7 @@ function getInputValue() {
   return false;
 }
 
-function filterTopic(){
+function filterTopic() {
   // Selecting the input element and get its value 
   let topic = document.getElementById("topic").value;
 
@@ -237,15 +313,11 @@ function filterTopic(){
   return false;
 }
 
+// Clear form values in Tweet Sentiment Graph
 function resetFilter() {
 
-  // Selecting the input element and get its value 
-  let topic = document.getElementById("topic").value;
-  topic = "";
-
-  // Selecting the input element and get its value 
-  let inputVal = document.getElementById("filter").value;
-  inputVal = "";
+  // Reset form values to default
+  document.getElementById("formTweetsFilter").reset();
 
   // Reset Graph
   initialGraphs();
