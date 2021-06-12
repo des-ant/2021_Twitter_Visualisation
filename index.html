@@ -287,16 +287,26 @@
         <div class="columns is-centered is-vcentered">
           <div class="column is-2">
             <form>
+
+              <label for="topic">Choose a topic:</label>
+              <select name="topic" id="topic" onchange="filterTopic()">
+                <option value="" autofocus>None</option>
+                <option value="guns">Guns</option>
+                <option value="lgbt">LGBT</option>
+                <option value="china">China & Russia</option>
+              </select>
+              <br>
               <label for="filter">Enter words separated by commas</label><br>
               <input type="text" id="filter" name="filter" placeholder="E.g. China, Russia"><br>
               <button class="button" onclick="return getInputValue();">Filter</button>
+              <button class="button" onclick="return resetFilter();">Reset</button>
             </form>
           </div>
           <div class="column is-10">
             <div class="columns is-centered">
               <div class="column is-10">
                 <figure>
-                  <!-- Trump Tweet Amount Plot -->
+                  <!-- Trump Tweet Sentiment Plot -->
                   <div id="plotSentObama" class="graphs-center"></div>
                 </figure>
               </div>
@@ -304,31 +314,15 @@
             <div class="columns is-centered">
               <div class="column is-10">
                 <figure>
-                  <!-- Trump Tweet Amount Plot -->
+                  <!-- Trump Tweet Sentiment Plot -->
                   <div id="plotSentTrump" class="graphs-center"></div>
                 </figure>
               </div>
             </div>
           </div>
         </div>
-
       </section>
 
-
-      <!-- <section class="section">
-        <div class="columns is-centered">
-          <div class="column is-5">
-            <h1 class="title">Misinformation and Conspiracies</h1>
-            <p class="mb-4">
-              Trump also uses social media to spread misinformation (Vazquez et al., 2020). According to data analytics company Factba.se, as of 17th December 2020, Twitter had flagged 362 of his tweets as potentially misleading or disputed (Vazquez et al., 2020).
-            </p>
-            <p>
-              Published on 2nd November 2019, an investigation by The New York Times found that, during his presidency, Trump "retweeted 217 accounts that have not been verified by Twitter," at least 145 of which "have pushed conspiracy or fringe content, including
-              more than two dozen that have since been suspended by Twitter" (McIntire, Yourish & Buchanan, 2019).
-            </p>
-          </div>
-        </div>
-      </section> -->
 
       <section class="section">
         <div class="columns is-centered">
@@ -645,8 +639,6 @@
               <br><br>
               McEvoy, J. (2021). Woman Possibly ‘Crushed To Death’: These Are The Five People Who Died Amid Pro-Trump Riots. Retrieved 9 June 2021, from <a href="https://www.forbes.com/sites/jemimamcevoy/2021/01/08/woman-possibly-crushed-to-death-these-are-the-five-people-who-died-amid-pro-trump-riots/?sh=1da93a12737c" target="_blank" rel="noopener noreferrer">https://www.forbes.com/sites/jemimamcevoy/2021/01/08/woman-possibly-crushed-to-death-these-are-the-five-people-who-died-amid-pro-trump-riots/?sh=1da93a12737c</a>
               <br><br>
-              <!-- McIntire, M., Yourish, K., & Buchanan, L. (2019). In Trump’s Twitter Feed: Conspiracy-Mongers, Racists and Spies. Retrieved 9 June 2021, from <a href="https://www.nytimes.com/interactive/2019/11/02/us/politics/trump-twitter-disinformation.html" target="_blank" rel="noopener noreferrer">https://www.nytimes.com/interactive/2019/11/02/us/politics/trump-twitter-disinformation.html</a>
-              <br><br> -->
               Morris, D. (2017). Twitter Versus the Traditional Media. Social Science Computer Review, 36(4), 456-468. doi: 10.1177/0894439317721441
               <br><br>
               O'Sullivan, D. (2020). Facebook removes Trump post falsely saying flu is more lethal than Covid. Retrieved 9 June 2021, from <a href="https://edition.cnn.com/2020/10/06/tech/facebook-trump-covid-flu-false/index.html" target="_blank" rel="noopener noreferrer">https://edition.cnn.com/2020/10/06/tech/facebook-trump-covid-flu-false/index.html</a>
@@ -667,8 +659,6 @@
               <br><br>
               Tankovska, H. (2021). Twitter accounts with the most followers worldwide 2021. Retrieved 8 June 2021, from <a href="https://www.statista.com/statistics/273172/twitter-accounts-with-the-most-followers-worldwide/" target="_blank" rel="noopener noreferrer">https://www.statista.com/statistics/273172/twitter-accounts-with-the-most-followers-worldwide/</a>
               <br><br>
-              <!-- Vazquez, M., Hickey, C., Krishnakumar, P., & Boschma, J. (2020). Donald Trump's presidency by the numbers. Retrieved 8 June 2021, from <a href="https://edition.cnn.com/2020/12/18/politics/trump-presidency-by-the-numbers/index.html" target="_blank" rel="noopener noreferrer">https://edition.cnn.com/2020/12/18/politics/trump-presidency-by-the-numbers/index.html</a>
-              <br><br> -->
               World Health Organization. (2021). <i>Coronavirus disease (COVID-19) Weekly Epidemiological Update and Weekly Operational Update</i>. Retrieved from <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports" target="_blank" rel="noopener noreferrer">https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports</a>
             </p>
           </div>

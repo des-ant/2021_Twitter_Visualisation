@@ -176,7 +176,7 @@ function initialGraphs(words) {
       tweet.author = "Obama";
     }
     // Make sentiment plot
-    make_sentiment(plotSentObama, tweets, 'Obama Tweet Sentiment Over Time');
+    make_sentiment(plotSentObama, tweets, "Obama's Tweet Sentiment During Presidency");
   });
 
   // Draw Trump graphs
@@ -190,7 +190,7 @@ function initialGraphs(words) {
       tweet.author = "Trump";
     }
     // Make sentiment plot
-    make_sentiment(plotSentTrump, tweets, 'Trump Tweet Sentiment Over Time');
+    make_sentiment(plotSentTrump, tweets, "Trump's Tweet Sentiment During Presidency");
   });
 };
 
@@ -211,25 +211,44 @@ function getInputValue() {
   return false;
 }
 
-// function filterTopic(){
-//   // Selecting the input element and get its value 
-//   let inputVal = document.getElementById("filter").value;
+function filterTopic(){
+  // Selecting the input element and get its value 
+  let topic = document.getElementById("topic").value;
 
-//   let topics = {
-//     guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
-//     lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
-//     china: ["China", "Russia"]
-//   };
+  // Do nothing if no topic is selcted
+  if (!topic) {
+    return false;
+  }
 
-//   inputVal = topics[]
+  let topics = {
+    guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
+    lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
+    china: ["China", "Russia"]
+  };
 
-//   let words = topics[topic];
+  let words = topics[topic];
 
-//   // // Displaying the value
-//   // alert(words);
+  // // Displaying the value
+  // alert(words);
 
-//   // return words;
-//   initialGraphs(words);
+  // return words;
+  initialGraphs(words);
 
-//   return false;
-// }
+  return false;
+}
+
+function resetFilter() {
+
+  // Selecting the input element and get its value 
+  let topic = document.getElementById("topic").value;
+  topic = "";
+
+  // Selecting the input element and get its value 
+  let inputVal = document.getElementById("filter").value;
+  inputVal = "";
+
+  // Reset Graph
+  initialGraphs();
+
+  return false;
+}
