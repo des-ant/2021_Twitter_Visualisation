@@ -30,7 +30,7 @@ function makeCovidPlot(plotDiv) {
     },
     margin: {
       t: 40,
-      b: 40
+      b: 100
     },
     height: 400,
     annotations: [
@@ -62,6 +62,21 @@ function makeCovidPlot(plotDiv) {
         font: {
           color: 'hsl(348, 86%, 43%)',
           size: 14
+        }
+      },
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 1.0,
+        y: -0.3,
+        xanchor: 'right',
+        yanchor: 'top',
+        text: 'Source: (Greenberg, 2020; World Health Organization, 2021)',
+        showarrow: false,
+        font: {
+          family: 'Sans-serif',
+          size: 12,
+          color: 'rgb(150,150,150)'
         }
       },
     ],
