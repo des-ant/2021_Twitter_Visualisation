@@ -21,17 +21,35 @@ function convertToParagraph(sentence, maxLineLength) {
   }, '');
 };
 
-
-// Tsne plot
-function make_plot(plotId, tweets, plotTitle) {
+// Sentiment plot
+function make_sentiment(plotId, tweets, plotTitle) {
   let data = [{
-    x: tweets.map(d => d.x),
-    y: tweets.map(d => d.y),
+    // Get x and y axis data points from tweet data
+    // Map x axis to date
+    // Map y axis to sentiment
+    x: tweets.map(d => d.datetime),
+    y: tweets.map(d => d.sentiment),
     customdata: tweets.map(d => convertToParagraph(d.author + ": " + d.text, 64)),
     marker: {
       size: 8,
-      colorscale: 'Jet',
-      color: tweets.map(d => d.cluster_id)
+      colorscale: [
+        ['0.0', 'rgb(165,0,38)'],
+        ['0.111111111111', 'rgb(215,48,39)'],
+        ['0.222222222222', 'rgb(244,109,67)'],
+        ['0.333333333333', 'rgb(253,174,97)'],
+        ['0.444444444444', 'rgb(254,224,144)'],
+        ['0.555555555556', 'rgb(224,243,248)'],
+        ['0.666666666667', 'rgb(171,217,233)'],
+        ['0.777777777778', 'rgb(116,173,209)'],
+        ['0.888888888889', 'rgb(69,117,180)'],
+        ['1.0', 'rgb(49,54,149)']
+      ],
+      // Color scale based on sentiment
+      color: tweets.map(d => d.sentiment),
+      line: {
+        color: 'rgb(25, 25, 25)',
+        width: 0.5
+      }
     },
     mode: 'markers',
     type: 'scatter',
@@ -43,25 +61,104 @@ function make_plot(plotId, tweets, plotTitle) {
   let layout = {
     hovermode: "closest", //hover closest by default
     xaxis: {
-      visible: false,
+      visible: true,
     },
     yaxis: {
-      visible: false,
+      visible: true,
     },
-    title: plotTitle
+    title: `<span style="font-size: 24px;"><b>${plotTitle}</b></span>`,
+    font: {
+      family: 'Sans-serif'
+    },
+    margin: {
+      t: 35,
+      b: 35
+    },
+    // Hide Axes Labels
+    xaxis: {
+      showgrid: true,
+      zeroline: false,
+      visible: true,
+      title: "Date"
+    },
+    yaxis: {
+      showgrid: false,
+      zeroline: false,
+      visible: false
+    },
+    annotations: [
+      // Sentiment positive axes label
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0,
+        y: 0.95,
+        xanchor: 'right',
+        yanchor: 'bottom',
+        text: 'More<br><span style="color: rgb(49,54,149);"><b>Positive</span></b><br>Sentiment',
+        showarrow: false,
+        font: {
+          size: 12,
+          family: 'Sans-serif',
+          color: 'rgb(75, 75, 75)'
+        }
+      },
+      // Sentiment negative axes arrow
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: -0.05,
+        y: 0.95,
+        xanchor: 'right',
+        yanchor: 'bottom',
+        showarrow: true,
+        arrowhead: 2,
+        arrowwidth: 3,
+        arrowcolor: 'rgb(75, 75, 75)',
+        ax: 0,
+        ay: 100,
+      },
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0,
+        y: 0.05,
+        xanchor: 'right',
+        yanchor: 'top',
+        text: 'More<br><span style="color: rgb(165,0,38);"><b>Negative</span></b><br>Sentiment',
+        showarrow: false,
+        font: {
+          size: 12,
+          family: 'Sans-serif',
+          color: 'rgb(75, 75, 75)'
+        }
+      },
+      // Sentiment negative axes arrow
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: -0.05,
+        y: 0.05,
+        xanchor: 'right',
+        yanchor: 'top',
+        showarrow: true,
+        arrowhead: 2,
+        arrowwidth: 3,
+        arrowcolor: 'rgb(75, 75, 75)',
+        ax: 0,
+        ay: -100,
+      }
+    ]
   };
 
   Plotly.newPlot(plotId, data, layout);
 
-};
+}
 
 // Helper function to filter tweets by topic
 function filter_tweets_topic(tweets, words) {
-
-
   // Only include tweets containing one of these strings inside a topic
   tweets = tweets.filter(tweet => words.some(word => tweet.text.includes(word)));
-
 
   return tweets;
 }
@@ -70,46 +167,39 @@ function filter_tweets_topic(tweets, words) {
 function initialGraphs(words) {
   // Draw Obama graphs
   Plotly.d3.csv("../data/obama_presidential_tweets.csv", (tweets) => {
-    Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_obama.csv", (tsne_data) => {
-      tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
-      
-      if (words) {
-        tweets = filter_tweets_topic(tweets, words);
-      }
+    if (words) {
+      tweets = filter_tweets_topic(tweets, words);
+    }
 
-      // Iterate through each tweet and add author property
-      for (let tweet of tweets) {
-        tweet.author = "Obama";
-      }
-      make_plot(plotTweetsObama, tweets, 'Obama Tweets');
-    });
+    // Iterate through each tweet and add author property
+    for (let tweet of tweets) {
+      tweet.author = "Obama";
+    }
+    // Make sentiment plot
+    make_sentiment(plotSentObama, tweets, 'Obama Tweet Sentiment Over Time');
   });
 
   // Draw Trump graphs
   Plotly.d3.csv("../data/trump_presidential_tweets.csv", (tweets) => {
-    Plotly.d3.csv("../data/tsne_and_cluster/tsne_data_trump.csv", (tsne_data) => {
-      tweets = tweets.map((tweets, index) => Object.assign(tweets, tsne_data[index]));
-      
-      if (words) {
-        tweets = filter_tweets_topic(tweets, words);
-      }
+    if (words) {
+      tweets = filter_tweets_topic(tweets, words);
+    }
 
-      // Iterate through each tweet and add author property
-      for (let tweet of tweets) {
-        tweet.author = "Trump";
-      }
-      make_plot(plotTweetsTrump, tweets, 'Trump Tweets');
-    });
+    // Iterate through each tweet and add author property
+    for (let tweet of tweets) {
+      tweet.author = "Trump";
+    }
+    // Make sentiment plot
+    make_sentiment(plotSentTrump, tweets, 'Trump Tweet Sentiment Over Time');
   });
-
 };
 
 initialGraphs();
 
-function getInputValue(){
+function getInputValue() {
   // Selecting the input element and get its value 
   let inputVal = document.getElementById("filter").value;
-  
+
   let words = inputVal.split(",");
 
   // // Displaying the value
@@ -132,7 +222,7 @@ function getInputValue(){
 //   };
 
 //   inputVal = topics[]
-  
+
 //   let words = topics[topic];
 
 //   // // Displaying the value
