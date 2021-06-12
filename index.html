@@ -251,7 +251,7 @@
                 </tr>
                 <tr>
                   <td>Little Rocket Man</td>
-                  <td>Kim Jong Un</td>
+                  <td>Kim Jong-un</td>
                 </tr>
                 <tr>
                   <td>Pocahontas</td>
@@ -287,19 +287,49 @@
         <div class="columns is-centered is-vcentered">
           <div class="column is-2">
             <form id="formTweetsFilter">
-
-              <label for="topic">Choose a topic:</label>
-              <select name="topic" id="topic" onchange="filterTopic()">
-                <option value="" autofocus>None</option>
-                <option value="guns">Guns</option>
-                <option value="lgbt">LGBT</option>
-                <option value="china">China & Russia</option>
-              </select>
+              <div class="field">
+                <label for="topic" class="label">Choose a topic</label>
+                <div class="control">
+                  <div class="select">
+                    <select name="topic" id="topic" onchange="filterTopic()">
+                      <option value="" autofocus>None</option>
+                      <option value="guns">Guns</option>
+                      <option value="lgbt">LGBT</option>
+                      <option value="hillary">Hillary Clinton</option>
+                      <option value="kim">Kim Jong-un</option>
+                      <option value="elizabeth">Elizabeth Warren</option>
+                      <option value="nyt">The New York Times</option>
+                      <option value="angry">Angry Democrats</option>
+                      <option value="maxine">Maxine Waters</option>
+                      <option value="joe">Joe Biden</option>
+                      <option value="covid">COVID-19</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <br>
-              <label for="filter">Enter words separated by commas</label><br>
-              <input type="text" id="filter" name="filter" placeholder="E.g. China, Russia"><br>
-              <button class="button" onclick="return getInputValue();">Filter</button>
-              <button class="button" onclick="return resetFilter();">Reset</button>
+              <div class="field">
+                <label for="filter" class="label">Enter words separated by commas</label>
+                <div class="control">
+                  <input type="text" id="filter" name="filter" class="input" placeholder="E.g. China, Russia">
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <label class="checkbox">
+                    <input type="checkbox" id="caseSensitive">
+                    Case-sensitive
+                  </label>
+                </div>
+              </div>
+
+              <div class="field is-grouped">
+                <div class="control">
+                  <button class="button is-link" onclick="return getInputValue();">Filter</button>
+                  <button class="button is-link is-light" onclick="return resetFilter();">Reset</button>
+                </div>
+              </div>
             </form>
           </div>
           <div class="column is-10">

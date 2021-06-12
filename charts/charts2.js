@@ -223,19 +223,26 @@ function make_sentiment(plotId, tweets, plotTitle, tweetCount, avgSent) {
 }
 
 // Helper function to filter tweets by topic
-function filter_tweets_topic(tweets, words) {
-  // Only include tweets containing one of these strings inside a topic
-  tweets = tweets.filter(tweet => words.some(word => tweet.text.includes(word)));
+function filter_tweets_topic(tweets, words, isCaseSensitive) {
+
+  // Perform case sensitive filter
+  if (isCaseSensitive) {
+    // Only include tweets containing one of these strings inside a topic
+    tweets = tweets.filter(tweet => words.some(word => tweet.text.includes(word)));
+  } else {
+    // Perform case insensitive filter
+    tweets = tweets.filter(tweet => words.some(word => tweet.text.toLowerCase().includes(word.toLowerCase())));
+  }
 
   return tweets;
 }
 
 // Helper function to filter tweets, set up graphs
-function graphHelper(csvLocation, author, plotDiv, words) {
+function graphHelper(csvLocation, author, plotDiv, words, isCaseSensitive) {
   // Read csv file and extract and filter tweets
   Plotly.d3.csv(csvLocation, (tweets) => {
     if (words) {
-      tweets = filter_tweets_topic(tweets, words);
+      tweets = filter_tweets_topic(tweets, words, isCaseSensitive);
     }
 
     // Count number of tweets
@@ -262,12 +269,12 @@ function graphHelper(csvLocation, author, plotDiv, words) {
 }
 
 // Draw sentiment graphs
-function initialGraphs(words) {
+function initialGraphs(words, isCaseSensitive) {
   // Draw Obama graphs
-  graphHelper(obamaTweetsCsv, "Obama", plotSentObama, words);
+  graphHelper(obamaTweetsCsv, "Obama", plotSentObama, words, isCaseSensitive);
 
   // Draw Trump graphs
-  graphHelper(trumpTweetsCsv, "Trump", plotSentTrump, words);
+  graphHelper(trumpTweetsCsv, "Trump", plotSentTrump, words, isCaseSensitive);
 };
 
 initialGraphs();
@@ -276,13 +283,11 @@ function getInputValue() {
   // Selecting the input element and get its value 
   let inputVal = document.getElementById("filter").value;
 
+  // Separate words by comma
   let words = inputVal.split(",");
 
-  // // Displaying the value
-  // alert(words);
-
   // return words;
-  initialGraphs(words);
+  initialGraphs(words, isCaseSensitive());
 
   return false;
 }
@@ -299,7 +304,14 @@ function filterTopic() {
   let topics = {
     guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
     lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
-    china: ["China", "Russia"]
+    hillary: ["Crooked Hillary", "Hillary"],
+    kim: ["Little Rocket Man", "Kim", "Jong", "Un", "Jong-un"],
+    elizabeth: ["Elizabeth", "Elizabeth Warren", "Pocahontas"],
+    nyt: ["NYT", "New York Times", "Times", "Failing", "Failing and Corrupt"],
+    angry: ["Angry Democrats"],
+    maxine: ["Crazy Maxine", "Maxine", "Waters"],
+    joe: ["Joe", "Biden"],
+    covid: ["China Virus", "Virus", "virus", "plague", "Plague", "W.H.O.", "CoronaVirus", "Coronavirus", "Flu ", "Flu."]
   };
 
   let words = topics[topic];
@@ -307,8 +319,8 @@ function filterTopic() {
   // // Displaying the value
   // alert(words);
 
-  // return words;
-  initialGraphs(words);
+  // Perform case sensitive search
+  initialGraphs(words, true);
 
   return false;
 }
@@ -323,4 +335,9 @@ function resetFilter() {
   initialGraphs();
 
   return false;
+}
+
+// Check if search is case-sensitive
+function isCaseSensitive() {
+  return document.getElementById("caseSensitive").checked;
 }
