@@ -3,8 +3,8 @@ let plotTweetsObama = document.getElementById("plotTweetsObama");
 let plotTweetsTrump = document.getElementById("plotTweetsTrump");
 
 // Access CSV Tweet data locations
-let obamaTweetsCsv = "../data/obama_presidential_tweets.csv";
-let trumpTweetsCsv = "../data/trump_presidential_tweets.csv";
+let obamaTweetsCsv1 = "../data/obama_presidential_tweets.csv";
+let trumpTweetsCsv1 = "../data/trump_presidential_tweets.csv";
 
 // Make text fit hovertool
 // from https://codereview.stackexchange.com/a/171857
@@ -273,10 +273,10 @@ function graphHelper(csvLocation, author, plotDiv, words, isCaseSensitive) {
 // Draw sentiment graphs
 function initialGraphs(words, isCaseSensitive) {
   // Draw Obama graphs
-  graphHelper(obamaTweetsCsv, "Obama", plotSentObama, words, isCaseSensitive);
+  graphHelper(obamaTweetsCsv1, "Obama", plotSentObama, words, isCaseSensitive);
 
   // Draw Trump graphs
-  graphHelper(trumpTweetsCsv, "Trump", plotSentTrump, words, isCaseSensitive);
+  graphHelper(trumpTweetsCsv1, "Trump", plotSentTrump, words, isCaseSensitive);
 };
 
 initialGraphs();
