@@ -1,6 +1,8 @@
+// Access plot divs
 let plotTweetsObama = document.getElementById("plotTweetsObama");
 let plotTweetsTrump = document.getElementById("plotTweetsTrump");
 
+// Access CSV Tweet data locations
 let obamaTweetsCsv = "../data/obama_presidential_tweets.csv";
 let trumpTweetsCsv = "../data/trump_presidential_tweets.csv";
 
@@ -292,6 +294,7 @@ function getInputValue() {
   return false;
 }
 
+// Function to filter tweets by topic
 function filterTopic() {
   // Selecting the input element and get its value 
   let topic = document.getElementById("topic").value;
@@ -301,6 +304,7 @@ function filterTopic() {
     return false;
   }
 
+  // Preset key words and topics
   let topics = {
     guns: [" gun", "guns", "Gun ", "Guns ", "nra", "NRA"],
     lgbt: ["LGBT", "lgbt", "gay", "Gay", "lesbian", "Lesbian", "marriage", "homosexual", "DOMA", "loveislove"],
@@ -314,14 +318,13 @@ function filterTopic() {
     covid: ["China Virus", "Virus", "virus", "plague", "Plague", "W.H.O.", "CoronaVirus", "Coronavirus", "Flu ", "Flu."]
   };
 
+  // Access key words by topic
   let words = topics[topic];
-
-  // // Displaying the value
-  // alert(words);
 
   // Perform case sensitive search
   initialGraphs(words, true);
 
+  // Must return false so page is not refreshed on button click
   return false;
 }
 
@@ -334,6 +337,7 @@ function resetFilter() {
   // Reset Graph
   initialGraphs();
 
+  // Must return false so page is not refreshed on button click
   return false;
 }
 

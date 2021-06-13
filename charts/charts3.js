@@ -1,10 +1,12 @@
+// Access CSV Tweet data locations
 let trumpTweetsCsv = "../data/trump_presidential_tweets.csv";
 let obamaTweetsCsv = "../data/obama_presidential_tweets.csv";
 
+// Access plot divs
 let plotTrumpTweetAmount = document.getElementById("plotTrumpTweetAmount");
 let plotObamaTweetAmount = document.getElementById("plotObamaTweetAmount");
 
-
+// Bar graph plot for total number of daily tweets by each president
 function makeTweetAmount(plotDiv, csvLocation, plotTitle, plotColor) {
   // Read csv file and get tweet data
   Plotly.d3.csv(csvLocation, (tweets) => {

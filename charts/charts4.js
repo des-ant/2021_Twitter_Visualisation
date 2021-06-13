@@ -1,5 +1,7 @@
+// Access plot div
 let covidPlot = document.getElementById("covidPlot");
 
+// Draws bar graph of US Seasonal Flu Deaths 2010-2019 and COVID-19 indicator lines
 function makeCovidPlot(plotDiv) {
 
   let yearArray = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019];
@@ -64,6 +66,7 @@ function makeCovidPlot(plotDiv) {
           size: 14
         }
       },
+      // Source information
       {
         xref: 'paper',
         yref: 'paper',

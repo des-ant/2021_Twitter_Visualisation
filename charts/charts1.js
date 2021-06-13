@@ -1,7 +1,9 @@
+// Access plot divs
 let plotElection2008 = document.getElementById("plotElection2008");
 let plotElectionNews = document.getElementById("plotElectionNews");
 let plotFollowers = document.getElementById("plotFollowers");
 
+// Draws 2008 US Presidential Election Results
 function drawElection(plotDiv) {
 
   var obama = {
@@ -221,6 +223,7 @@ function drawElection(plotDiv) {
 drawElection(plotElection2008);
 
 // Code based on https://plotly.com/javascript/line-charts/
+// Draws line graph for source of election news 1996-2008
 function drawNews(plotDiv) {
 
   var xData = [
@@ -325,7 +328,7 @@ function drawNews(plotDiv) {
         y: 1.10,
         xanchor: 'center',
         yanchor: 'bottom',
-        text: '<b>Major Sources of Election News</b>',
+        text: '<b>Major Sources of Election News 1996 to 2008</b>',
         font:{
           family: 'Sans-serif',
           size: 24,
