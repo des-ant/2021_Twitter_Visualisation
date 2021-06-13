@@ -288,7 +288,6 @@ function drawNews(plotDiv) {
       family: 'Sans-serif'
     },
     xaxis: {
-      title: "Year",
       showline: true,
       showgrid: false,
       showticklabels: true,

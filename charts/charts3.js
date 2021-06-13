@@ -54,7 +54,7 @@ function makeTweetAmount(plotDiv, csvLocation, plotTitle, plotColor) {
         family: 'Sans-serif'
       },
       xaxis: {
-        title: "Date"
+        // title: "Date"
       },
       yaxis: {
         title: "Number of Tweets"

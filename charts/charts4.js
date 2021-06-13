@@ -23,7 +23,7 @@ function makeCovidPlot(plotDiv) {
       family: 'Sans-serif'
     },
     xaxis: {
-      title: "Year"
+      // title: "Year"
     },
     yaxis: {
       title: "Number of Deaths"
