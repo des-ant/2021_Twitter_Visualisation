@@ -3,8 +3,8 @@ let plotTweetsObama = document.getElementById("plotTweetsObama");
 let plotTweetsTrump = document.getElementById("plotTweetsTrump");
 
 // Access CSV Tweet data locations
-let obamaTweetsCsv1 = "../data/obama_presidential_tweets.csv";
-let trumpTweetsCsv1 = "../data/trump_presidential_tweets.csv";
+let obamaTweetsCsv1 = "https://raw.githubusercontent.com/des-ant/2021_Twitter_Visualisation/master/data/obama_presidential_tweets.csv";
+let trumpTweetsCsv1 = "https://raw.githubusercontent.com/des-ant/2021_Twitter_Visualisation/master/data/trump_presidential_tweets.csv";
 
 // Make text fit hovertool
 // from https://codereview.stackexchange.com/a/171857

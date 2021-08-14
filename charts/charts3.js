@@ -1,6 +1,6 @@
 // Access CSV Tweet data locations
-let trumpTweetsCsv = "../data/trump_presidential_tweets.csv";
-let obamaTweetsCsv = "../data/obama_presidential_tweets.csv";
+let trumpTweetsCsv = "https://raw.githubusercontent.com/des-ant/2021_Twitter_Visualisation/master/data/obama_presidential_tweets.csv";
+let obamaTweetsCsv = "https://raw.githubusercontent.com/des-ant/2021_Twitter_Visualisation/master/data/trump_presidential_tweets.csv";
 
 // Access plot divs
 let plotTrumpTweetAmount = document.getElementById("plotTrumpTweetAmount");
